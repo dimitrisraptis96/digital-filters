@@ -3,12 +3,12 @@ clear all;
 close all;
 clc;
 
+%% Load input signals
+load('sounds.mat'); 
+
 %% Constants values
-n = 320000;           % time steps
-coeff = 500;
-
-load('sounds.mat');                                                                                                                                                                                        
-
+n = length(d);      % time steps
+coeff = 500;        % filter's coefficients number
 
 %% Wiener-Hopf equations
 
@@ -22,7 +22,7 @@ for k = 2:coeff
 end
 
 % Compute auto-correlation matrix R of u(n)
-R = (1/n) * (U) * (U');
+R = (1/n) * U * (U');
 
 % Compute cross-correlation vector p between u(n) and d(n) 
 p = (1/n) * U * d;
@@ -31,17 +31,21 @@ p = (1/n) * U * d;
 w=R\p;
 
 % compute desired and noise free signals
-y = U'*w;
-e = d-y;
+e = d-U'*w;
 
 %% Plot resutls
 
 figure(1);
-subplot(2,1,1);  
-plot(d,'c');
-title('d(n)');
+xlabel('time steps n');
 
+ax1 = subplot(2,1,1);  
+plot(d)
+title('Desired signal')
+ylabel(ax1,'d(n)')
 
-subplot(2,1,2);  
-plot(Fse,'e');
-title('e(n)');
+ax2 = subplot(2,1,2);  
+plot(e);
+title('Noise free signal');
+ylabel(ax2, 'e(n)');
+
+% soundsc(e,Fs);
