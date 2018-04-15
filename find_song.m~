@@ -38,10 +38,10 @@ e = d-y;
 
 figure(1);
 subplot(2,1,1);  
-plot(d);
+plot(d,'c');
 title('d(n)');
 
 
 subplot(2,1,2);  
-plote(e);
+plot(Fse,'e');
 title('e(n)');

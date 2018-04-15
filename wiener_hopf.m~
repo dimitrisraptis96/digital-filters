@@ -5,7 +5,7 @@ clc;
 
 %% Constants values
 n = 1000;               % time steps
-coeff = 2;              % filter's coefficients number
+coeff = 2;              % number of filter's coefficients
 varV = 0.18;            % white noise's variance
 mu = [0.01 1 2.5 4];	% steepest descent m parameter
 epsilon = 1.0e-8;       % steppest descent epsilon parameter
@@ -17,7 +17,6 @@ u = zeros(n,1);     % independent noise measurement
 e = zeros(n,1);     % clean signal
 
 %% Create functions
-
 v = sqrt(varV) .* randn(n, 1); % Gaussian white noise
 v = v - mean(v);
 
@@ -33,7 +32,7 @@ end
 
 %% Wiener-Hopf equations
 
-% Compute autocorrelation matrix R of u(n) 
+% Compute autocorrelation matrix R of u(n) signal
 u_minus_1 = [0; u(1:n-1)];
 
 r = [u'; u_minus_1'];
