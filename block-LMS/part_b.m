@@ -1,8 +1,8 @@
 close all;
 clc;
 
-n = 4096; % x lenth
-m = 4096; % y length  
+n = 2^12; % x lenth
+m = 2^12; % y length  
 
 
 %% Generate random signals

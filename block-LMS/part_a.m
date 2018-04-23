@@ -3,12 +3,13 @@ clear all;
 close all;
 clc;
 
-time = zeros(16,2);
-error = zeros(16,1);
+k = 14;
 
-for i=1:14
-    
-    fprintf('\n=================================================\n');
+time = zeros(k,2);
+error = zeros(k,1);
+
+for i=1:k
+    % Define n and m  (m <= n)
     n=2^i;
     m=2^(i-1);
     
@@ -19,37 +20,41 @@ for i=1:14
     a =  u(m:n);
     b =  u(m:-1:1);
     
-    
-    
     % Toeplitz matrix-vector Fast Multiplication nlog(n) complexity
- 
     tic
+    
     n = length(a);
     c = [a; 0; fliplr(b(2:end).').'];
-    F = fft(c);
-    p = ifft(F.*fft([w; zeros(n,1)]));
+    p = ifft( fft(c) .* fft([w; zeros(n,1)]));
     yf = p(1:n);
-    time(i,1) = toc
-    fprintf('n * log (n)');
+    
+    time(i,1) = toc;
 
     
-    % Toeplitz matrix-vector product n^2 complexity
-    
-    
+    % Product n^2 complexity
     tic
+    
     T = toeplitz ( a, b); % large memory
     y = T * w;
-    time(i,2) = toc
-    fprintf('n^2 complexity:'); 
+    
+    time(i,2) = toc;
     
     
-    error(i) = norm ( yf - y )/norm(y);
-    fprintf('Error: '); display(error);
-        
+    error(i) = norm ( yf - y ) / norm(y);        
 end
 
+fprintf('Error: '); display(error);
+fprintf('Time: '); display(time');
+
 figure(1);
-plot((1:16), time(:,1));
-hold on
-plot((1:16), time(:,2));
-hold off
+plot(time);
+xlabel( 'Time step 2^n' );  
+ylabel( 'Time elapsed (seconds)' );
+title( 'y =Tw multiplication' );
+legend( { 'n log(n)', 'n^2' } )
+
+figure(2);
+plot(error);
+xlabel( 'Time step 2^n' );  
+ylabel( ' norm( yf - y ) / norm(y)' );
+title( 'Relative Error' );
